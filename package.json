@@ -1,0 +1,35 @@
+{
+  "name": "mihoyo-api",
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "types": "dist/app.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/app.ts",
+    "dev": "ts-node-dev src/app.ts --respawn --transpileOnly"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.0",
+    "crypto": "^1.0.1",
+    "form-data": "^3.0.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^10.0.0",
+    "moment": "^2.29.1",
+    "node-rsa": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/form-data": "^2.5.0",
+    "@types/koa": "^2.11.7",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.4.1",
+    "@types/node-rsa": "^1.0.0",
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.1.3"
+  }
+}
