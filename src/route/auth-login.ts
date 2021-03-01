@@ -25,7 +25,9 @@ export default async (ctx: Koa.Context) => {
   }
 
   const result = await Auth.login(account, password)
-  setCookie(ctx, {combo_token: result.data.combo.combo_token})
+  if(result.code == 200) {
+    setCookie(ctx, {combo_token: result.data.combo.combo_token})
+  }
   ctx.status = result.code
   ctx.body = result
 }
