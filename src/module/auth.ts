@@ -11,7 +11,7 @@ import {resultError, resultOK} from "./common";
 
 class Auth {
   static async authKey(type: string, cookies: any) {
-    const uid = cookies.uid
+    const uid = cookies.account_uid
     const combo_token = cookies.combo_token
 
     const params: any = {
@@ -67,7 +67,8 @@ class Auth {
     data = await http.post('https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/v2/login', params)
     return resultOK({
       account: info,
-      combo: data.data
+      combo: data.data,
+      cookie:`account_uid=${info.uid}; combo_token=${data.data.combo_token};`
     })
   }
 }
