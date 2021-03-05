@@ -1,7 +1,7 @@
-import Koa from "koa";
-import Auth from "../module/auth";
+import Koa from 'koa'
+import Auth from '../module/auth'
 import http from '../util/http'
-import OtherUtil from "../util/other-util";
+import OtherUtil from '../util/other-util'
 
 /**
  * @author 真心
@@ -30,14 +30,17 @@ export default async (ctx: Koa.Context) => {
     size = 6
   }
   const types: any = {
-    100: "新手祈愿",
-    200: "常驻祈愿",
-    301: "角色活动祈愿",
-    302: "武器活动祈愿"
+    100: '新手祈愿',
+    200: '常驻祈愿',
+    301: '角色活动祈愿',
+    302: '武器活动祈愿'
   }
 
   const auth_appid = 'webview_gacha'
-  let data: any = await Auth.authKey(auth_appid, OtherUtil.cookieToJSON(ctx.cookies.request.headers.cookie))
+  let data: any = await Auth.authKey(
+    auth_appid,
+    OtherUtil.cookieToJSON(ctx.cookies.request.headers.cookie)
+  )
 
   if (data.code != 200) {
     ctx.status = 400
@@ -63,7 +66,10 @@ export default async (ctx: Koa.Context) => {
     size: size
   }
 
-  data = await http.get('https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog', params)
+  data = await http.get(
+    'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog',
+    params
+  )
   if (data.retcode != 0) {
     ctx.status = 400
     ctx.body = {

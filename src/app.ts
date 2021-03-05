@@ -2,16 +2,19 @@ import Koa from 'koa'
 import Logger from 'koa-logger'
 import Moment from 'moment'
 import bodyParser from 'koa-bodyparser'
-import Router from "./route/router";
-import GlobalVar from "./data/global-var";
-import OtherUtil from "./util/other-util";
-import chalk from "chalk";
+import Router from './route/router'
+import GlobalVar from './data/global-var'
+import OtherUtil from './util/other-util'
+import chalk from 'chalk'
 
 GlobalVar.runtime = OtherUtil.getTimeStamp(false)
 
 const app = new Koa()
 const logger = Logger((str) => {
-  console.log(`[${chalk.hex('#0088FF').bold(Moment().format('YYYY/MM/DD HH:mm:ss'))}]` + str)
+  console.log(
+    `[${chalk.hex('#0088FF').bold(Moment().format('YYYY/MM/DD HH:mm:ss'))}]` +
+      str
+  )
 })
 
 app.use(logger)

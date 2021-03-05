@@ -1,6 +1,6 @@
 import cryptoUtil from '../util/crypto-util'
 import axios from 'axios'
-import Koa from "koa";
+import Koa from 'koa'
 
 export default async (ctx: Koa.Context) => {
   let query: any = {}

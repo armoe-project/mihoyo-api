@@ -1,4 +1,4 @@
-import Koa from "koa";
+import Koa from 'koa'
 
 import axios from 'axios'
 import OtherUtil from '../util/other-util'
@@ -22,10 +22,14 @@ export default async (ctx: Koa.Context) => {
     return
   }
   const time = OtherUtil.getTimeStamp(false)
-  const data: any = await axios.post('https://webapi.account.mihoyo.com/Api/create_mobile_captcha', 'action_type=login&mobile=' + phone + '&t=' + time
-  ).catch((res: any) => {
-    console.log(res.response)
-  })
+  const data: any = await axios
+    .post(
+      'https://webapi.account.mihoyo.com/Api/create_mobile_captcha',
+      'action_type=login&mobile=' + phone + '&t=' + time
+    )
+    .catch((res: any) => {
+      console.log(res.response)
+    })
   if (data.data.code !== 200) {
     ctx.status = 400
     ctx.body = {
@@ -41,5 +45,4 @@ export default async (ctx: Koa.Context) => {
       data: data.data.data
     }
   }
-
 }

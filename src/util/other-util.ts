@@ -18,7 +18,6 @@ class OtherUtil {
       result[data[0]] = data[1]
     }
     return result
-
   }
 
   static jsonToCookie(cookies?: any) {

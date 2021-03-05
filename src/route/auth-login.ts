@@ -1,6 +1,6 @@
-import Koa from "koa";
-import Auth from "../module/auth";
-import {setCookie} from "../module/common";
+import Koa from 'koa'
+import Auth from '../module/auth'
+import { setCookie } from '../module/common'
 
 export default async (ctx: Koa.Context) => {
   let query: any = {}
@@ -25,7 +25,7 @@ export default async (ctx: Koa.Context) => {
   }
 
   const result = await Auth.login(account, password)
-  if(result.code == 200) {
+  if (result.code == 200) {
     setCookie(ctx, {
       account_uid: result.data.account.uid,
       combo_token: result.data.combo.combo_token

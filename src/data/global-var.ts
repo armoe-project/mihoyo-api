@@ -6,6 +6,7 @@
  */
 class GlobalVar {
   static runtime: number
+  static appVer = '2.5.1'
 }
 
 export default GlobalVar

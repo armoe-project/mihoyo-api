@@ -1,6 +1,6 @@
-import Koa from "koa";
-import axios from "axios";
-import CryptoUtil from "../util/crypto-util";
+import Koa from 'koa'
+import axios from 'axios'
+import CryptoUtil from '../util/crypto-util'
 
 export default async (ctx: Koa.Context) => {
   let query: any = {}
@@ -11,7 +11,9 @@ export default async (ctx: Koa.Context) => {
   }
   const id = query.id
 
-  const cookie = `stuid=${ctx.cookies.get('stuid')}; stoken=${ctx.cookies.get('stoken')};`
+  const cookie = `stuid=${ctx.cookies.get('stuid')}; stoken=${ctx.cookies.get(
+    'stoken'
+  )};`
   if (!id) {
     const list: any = []
     for (let i = 1; i <= 5; i++) {
@@ -33,17 +35,21 @@ export default async (ctx: Koa.Context) => {
 }
 
 async function sign(cookie: string, id: string | number) {
-  const data = await axios.post('https://bbs-api.mihoyo.com/apihub/sapi/signIn', {
-    gids: id
-  }, {
-    headers: {
-      ds: CryptoUtil.genMiHoYoDS(),
-      'x-rpc-client_type': 4,
-      'x-rpc-app_version': '2.3.0',
-      referer: 'https://app.mihoyo.com',
-      cookie: cookie
+  const data = await axios.post(
+    'https://bbs-api.mihoyo.com/apihub/sapi/signIn',
+    {
+      gids: id
+    },
+    {
+      headers: {
+        ds: CryptoUtil.genMiHoYoDS230(),
+        'x-rpc-client_type': 4,
+        'x-rpc-app_version': '2.3.0',
+        referer: 'https://app.mihoyo.com',
+        cookie: cookie
+      }
     }
-  })
+  )
   const status = data.data.retcode
   if (status != 0) {
     return {
@@ -61,7 +67,6 @@ async function sign(cookie: string, id: string | number) {
     name: getNameById(id)
   }
 }
-
 
 function getNameById(id: string | number): string {
   switch (id) {

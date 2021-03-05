@@ -1,7 +1,7 @@
-import Koa from "koa";
-import {getQuery} from "../module/common";
-import Auth from "../module/auth";
-import OtherUtil from "../util/other-util";
+import Koa from 'koa'
+import { getQuery } from '../module/common'
+import Auth from '../module/auth'
+import OtherUtil from '../util/other-util'
 
 /**
  * @author 真心
@@ -26,7 +26,10 @@ export default async (ctx: Koa.Context) => {
     return
   }
 
-  const result = await Auth.authKey(type, OtherUtil.cookieToJSON(ctx.cookies.request.headers.cookie))
+  const result = await Auth.authKey(
+    type,
+    OtherUtil.cookieToJSON(ctx.cookies.request.headers.cookie)
+  )
   ctx.status = result.code
   ctx.body = result
 }

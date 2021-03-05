@@ -1,6 +1,6 @@
-import CryptoUtil from "../util/crypto-util";
-import http from "../util/http";
-import {resultError, resultOK} from "./common";
+import CryptoUtil from '../util/crypto-util'
+import http from '../util/http'
+import { resultError, resultOK } from './common'
 
 /**
  * @author 真心
@@ -26,7 +26,10 @@ class Auth {
     params['sign'] = CryptoUtil.genMiHoYoSign(params)
     params['authkey_ver'] = 1
     params['sign_type'] = 2
-    const data: any = await http.post('https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/genAuthKey', params)
+    const data: any = await http.post(
+      'https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/genAuthKey',
+      params
+    )
     if (data.retcode != 0) {
       return resultError({
         error: data.message,
@@ -34,15 +37,18 @@ class Auth {
       })
     }
     const authkey = data.data.authkey
-    return resultOK({authkey: authkey})
+    return resultOK({ authkey: authkey })
   }
 
   static async login(account: string, password: string) {
-    let data: any = await http.post('https://hk4e-sdk.mihoyo.com/hk4e_cn/mdk/shield/api/login', {
-      account: account,
-      password: CryptoUtil.getMiHoYoRSAPassword(password),
-      is_crypto: true
-    })
+    let data: any = await http.post(
+      'https://hk4e-sdk.mihoyo.com/hk4e_cn/mdk/shield/api/login',
+      {
+        account: account,
+        password: CryptoUtil.getMiHoYoRSAPassword(password),
+        is_crypto: true
+      }
+    )
     if (data.retcode != 0) {
       return resultError({
         error: data.message,
@@ -61,18 +67,19 @@ class Auth {
       app_id: 4,
       channel_id: 1,
       data: JSON.stringify(paramsData),
-      device: '',
+      device: ''
     }
     params['sign'] = CryptoUtil.genMiHoYoSign(params)
-    data = await http.post('https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/v2/login', params)
+    data = await http.post(
+      'https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/v2/login',
+      params
+    )
     return resultOK({
       account: info,
       combo: data.data,
-      cookie:`account_uid=${info.uid}; combo_token=${data.data.combo_token};`
+      cookie: `account_uid=${info.uid}; combo_token=${data.data.combo_token};`
     })
   }
 }
 
 export default Auth
-
-

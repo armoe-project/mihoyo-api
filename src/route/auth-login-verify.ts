@@ -1,7 +1,7 @@
 import otherUtil from '../util/other-util'
-import Koa from "koa";
+import Koa from 'koa'
 import http from '../util/http'
-import {getQuery, resultError, resultOK, setCookie} from '../module/common';
+import { getQuery, resultError, resultOK, setCookie } from '../module/common'
 
 export default async (ctx: Koa.Context) => {
   let query: any = getQuery(ctx)
@@ -19,11 +19,16 @@ export default async (ctx: Koa.Context) => {
   }
 
   const time = otherUtil.getTimeStamp(false)
-  const data = await http.post('https://webapi.account.mihoyo.com/Api/login_by_mobilecaptcha', {
-    mobile: phone,
-    mobile_captcha: code,
-    t: time
-  }, null, 1)
+  const data = await http.post(
+    'https://webapi.account.mihoyo.com/Api/login_by_mobilecaptcha',
+    {
+      mobile: phone,
+      mobile_captcha: code,
+      t: time
+    },
+    null,
+    1
+  )
   if (data.data.status !== 1) {
     const result = resultError({
       error: data.data.msg,
@@ -33,12 +38,16 @@ export default async (ctx: Koa.Context) => {
     ctx.body = result
     return
   }
-  console.log(data);
+  console.log(data)
   const account_id = data.data.account_info.account_id
   const ticket = data.data.account_info.weblogin_token
-  const stoken_data = await http.get(`https://api-takumi.mihoyo.com/auth/api/getMultiTokenByLoginTicket?login_ticket=${ticket}&token_types=3&uid=${account_id}`)
+  const stoken_data = await http.get(
+    `https://api-takumi.mihoyo.com/auth/api/getMultiTokenByLoginTicket?login_ticket=${ticket}&token_types=3&uid=${account_id}`
+  )
   const cookie_stoken = stoken_data.data.list[0].token
-  const ctoken_data = await http.get(`https://webapi.account.mihoyo.com/Api/cookie_accountinfo_by_loginticket?login_ticket=${ticket}&t=${time}`)
+  const ctoken_data = await http.get(
+    `https://webapi.account.mihoyo.com/Api/cookie_accountinfo_by_loginticket?login_ticket=${ticket}&t=${time}`
+  )
   const cookie_ctoken = ctoken_data.data.cookie_info.cookie_token
   const cookie_str = setCookie(ctx, {
     account_id: account_id,

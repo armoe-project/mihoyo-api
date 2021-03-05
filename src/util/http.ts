@@ -9,7 +9,6 @@ import FormData from 'form-data'
  */
 
 class Http {
-
   /**
    * 发送Get请求
    * @param url 链接
@@ -32,7 +31,6 @@ class Http {
     }
   }
 
-
   /**
    * 发送POST请求
    * @param url 链接
@@ -41,7 +39,12 @@ class Http {
    * @param type POST类型 0: Json 1: Form 默认: 0
    * @return 数据
    */
-  static async post(url: string, body: any = {}, headers?: any, type: number = 0) {
+  static async post(
+    url: string,
+    body: any = {},
+    headers?: any,
+    type: number = 0
+  ) {
     if (!headers) {
       headers = axios.defaults.headers
     }
@@ -66,7 +69,6 @@ class Http {
       return e.response.data
     }
   }
-
 
   /**
    * Json转From

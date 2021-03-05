@@ -4,8 +4,8 @@
  * @email qgzhenxin@qq.com
  * @description Common
  */
-import Koa from "koa";
-import OtherUtil from "../util/other-util";
+import Koa from 'koa'
+import OtherUtil from '../util/other-util'
 
 function getQuery(ctx: Koa.Context) {
   if (ctx.method === 'GET') {
@@ -38,7 +38,7 @@ function _result(code: number, data: any) {
 function setCookie(ctx: Koa.Context, cookies: any): string {
   let cookie_str = ''
   for (const key in cookies) {
-    const cookie = _setCookie(ctx, {key: key, value: cookies[key]})
+    const cookie = _setCookie(ctx, { key: key, value: cookies[key] })
     cookie_str = cookie_str + cookie + ' '
   }
   cookie_str = cookie_str.trim()
@@ -58,16 +58,16 @@ function _setCookie(ctx: Koa.Context, cookie: BaseObject) {
 }
 
 interface BaseResult {
-  code: number,
-  msg: string,
+  code: number
+  msg: string
   data: any
 }
 
 interface BaseObject {
-  key: string,
-  value: any,
+  key: string
+  value: any
   names?: string[]
 }
 
-export {resultError, resultOK, getQuery, setCookie}
-export {BaseResult}
+export { resultError, resultOK, getQuery, setCookie }
+export { BaseResult }
