@@ -26,7 +26,7 @@ export default async (ctx: Koa.Context) => {
   if (!server) {
     server = 'cn_gf01'
   }
-  const ds = cryptoUtil.genMiHoYoDS()
+  const ds = cryptoUtil.genMiHoYoDS230()
   const cookie =
     'account_id=' +
     ctx.cookies.get('account_id') +
@@ -37,7 +37,7 @@ export default async (ctx: Koa.Context) => {
     {
       headers: {
         cookie: cookie,
-        'x-rpc-app_version': GlobalVar.appVer,
+        'x-rpc-app_version': '2.3.0',
         'x-rpc-client_type': 5,
         ds: ds
       },
