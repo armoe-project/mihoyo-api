@@ -1,7 +1,7 @@
 import Koa from 'koa'
 
 import axios from 'axios'
-import OtherUtil from '../util/other-util'
+import OtherUtil from '../../../util/other-util'
 
 export default async (ctx: Koa.Context) => {
   let query: any = {}

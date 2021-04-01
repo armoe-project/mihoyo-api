@@ -1,17 +1,19 @@
 import Router from 'koa-router'
 
-import AuthLogin from './auth-login'
-import AuthLoginMobile from './auth-login-mobile'
-import AuthLoginVerify from './auth-login-verify'
+import AuthLogin from './auth/auth-login'
+import AuthLoginMobile from './auth/login/auth-login-mobile'
+import AuthLoginVerify from './auth/login/auth-login-verify'
 import UserInfo from './user-info'
 import BbsSign from './bbs-sign'
 import Koa from 'koa'
 import GlobalVar from '../data/global-var'
 import OtherUtil from '../util/other-util'
-import AuthKey from './auth-key'
+import AuthKey from './auth/auth-key'
 import MyPrayerHistory from './my-prayer-history'
 import http from '../util/http'
 import CryptoUtil from '../util/crypto-util'
+import qrcodeFetch from './auth/login/qrcode/qrcode-fetch'
+import qrcodeQuery from './auth/login/qrcode/qrcode-query'
 
 const router: Router = new Router()
 
@@ -55,6 +57,14 @@ const routes = [
   {
     path: '/auth/login/verify',
     route: AuthLoginVerify
+  },
+  {
+    path: '/auth/login/qrcode/fetch',
+    route: qrcodeFetch
+  },
+  {
+    path: '/auth/login/qrcode/query',
+    route: qrcodeQuery
   },
   {
     path: '/auth/key',

@@ -58,6 +58,15 @@ class Auth {
     const info = data.data.account
     const token = info.token
     const uid = info.uid
+    data = this.comboLogin(uid, token)
+    return resultOK({
+      account: info,
+      combo: data.data,
+      cookie: `account_uid=${info.uid}; combo_token=${data.data.combo_token};`
+    })
+  }
+
+  private static async comboLogin(uid: number, token: string) {
     const paramsData = {
       uid: uid,
       guest: false,
@@ -70,14 +79,76 @@ class Auth {
       device: ''
     }
     params['sign'] = CryptoUtil.genMiHoYoSign(params)
-    data = await http.post(
+    const data = await http.post(
       'https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/v2/login',
       params
     )
+
+    return data
+  }
+
+  static async qrcodeFatch(device: string) {
+    const data = await http.post(
+      'https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode/fetch',
+      { app_id: '4', device }
+    )
+
+    if (data.retcode != 0) {
+      return resultError({
+        error: data.message,
+        error_code: data.retcode
+      })
+    }
     return resultOK({
-      account: info,
-      combo: data.data,
-      cookie: `account_uid=${info.uid}; combo_token=${data.data.combo_token};`
+      url: data.data.url,
+      ticket: data.data.url.split('&ticket=')[1],
+      device
+    })
+  }
+
+  static async qrcodeQuery(ticket: string, device: string) {
+    const data = await http.post(
+      'https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode/query',
+      { app_id: '4', ticket, device }
+    )
+
+    if (data.retcode != 0) {
+      return resultError({
+        error: data.message,
+        error_code: data.retcode
+      })
+    }
+    let scanned = false
+    let confirmed = false
+    let raw = data.data.payload.raw
+
+    if (raw == '') {
+      raw = null
+    } else {
+      try {
+        raw = JSON.parse(raw)
+      } catch {}
+    }
+    switch (data.data.stat) {
+      case 'Init':
+        break
+      case 'Scanned':
+        scanned = true
+        break
+      case 'Confirmed':
+        confirmed = true
+        const result = await this.comboLogin(raw.uid, raw.token)
+        raw = {
+          uid: raw.uid,
+          combo: result.data,
+          cookie: `account_uid=${raw.uid}; combo_token=${result.data.combo_token};`
+        }
+    }
+
+    return resultOK({
+      scanned,
+      confirmed,
+      data: raw
     })
   }
 }

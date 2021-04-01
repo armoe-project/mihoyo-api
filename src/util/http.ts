@@ -17,9 +17,6 @@ class Http {
    * @return 数据
    */
   static async get(url: string, params: any = {}, headers?: any) {
-    if (!headers) {
-      headers = axios.defaults.headers
-    }
     try {
       const data: any = await axios.get(url, {
         params: params,
@@ -45,9 +42,6 @@ class Http {
     headers?: any,
     type: number = 0
   ) {
-    if (!headers) {
-      headers = axios.defaults.headers
-    }
     let config
     let form
     if (type === 0) {

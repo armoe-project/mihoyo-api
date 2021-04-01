@@ -1,7 +1,7 @@
-import otherUtil from '../util/other-util'
+import otherUtil from '../../../util/other-util'
 import Koa from 'koa'
-import http from '../util/http'
-import { getQuery, resultError, resultOK, setCookie } from '../module/common'
+import http from '../../../util/http'
+import { getQuery, resultError, resultOK, setCookie } from '../../../module/common'
 
 export default async (ctx: Koa.Context) => {
   let query: any = getQuery(ctx)

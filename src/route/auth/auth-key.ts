@@ -1,7 +1,7 @@
 import Koa from 'koa'
-import { getQuery } from '../module/common'
-import Auth from '../module/auth'
-import OtherUtil from '../util/other-util'
+import { getQuery } from '../../module/common'
+import Auth from '../../module/auth'
+import OtherUtil from '../../util/other-util'
 
 /**
  * @author 真心
