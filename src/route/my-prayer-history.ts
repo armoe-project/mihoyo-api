@@ -95,7 +95,7 @@ export default async (ctx: Koa.Context) => {
 
   params.end_id = end_id
 
-  for (let i = 1; i < 10000; i++) {
+  while (true) {
     const data = await http.get(
       'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog',
       params
