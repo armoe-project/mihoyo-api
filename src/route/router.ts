@@ -9,12 +9,11 @@ import Koa from 'koa'
 import GlobalVar from '../data/global-var'
 import OtherUtil from '../util/other-util'
 import AuthKey from './auth/auth-key'
-import MyPrayerHistory from './my-prayer-history'
 import http from '../util/http'
 import CryptoUtil from '../util/crypto-util'
 import qrcodeFetch from './auth/login/qrcode/qrcode-fetch'
 import qrcodeQuery from './auth/login/qrcode/qrcode-query'
-
+import MyWishHistory from './my-wish-history'
 const router: Router = new Router()
 
 const routes = [
@@ -80,7 +79,11 @@ const routes = [
   },
   {
     path: '/my/prayer/history',
-    route: MyPrayerHistory
+    route: MyWishHistory
+  },
+  {
+    path: '/my/wish/history',
+    route: MyWishHistory
   }
 ]
 
