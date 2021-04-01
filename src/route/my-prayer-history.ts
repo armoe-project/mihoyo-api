@@ -16,18 +16,10 @@ export default async (ctx: Koa.Context) => {
   } else if (ctx.method === 'POST') {
     query = ctx.request.body
   }
-  let type = query.type
-  let page = query.page
-  let size = query.size
+  let { type } = query
 
   if (!type) {
     type = 301
-  }
-  if (!page) {
-    page = 1
-  }
-  if (!size) {
-    size = 6
   }
   const types: any = {
     100: '新手祈愿',
@@ -52,19 +44,21 @@ export default async (ctx: Koa.Context) => {
     return
   }
   const authkey = data.data.authkey
+
   const params = {
     authkey_ver: 1,
     sign_type: 2,
     auth_appid: auth_appid,
-    gacha_id: 'd86c391b7f731f5df2acdbe92138cbf1930cfa',
     lang: 'zh-cn',
     region: 'cn_gf01',
     authkey: authkey,
     game_biz: 'hk4e_cn',
     gacha_type: type,
-    page: page,
-    size: size
+    size: 20,
+    end_id: 0
   }
+
+  const list: any[] = []
 
   data = await http.get(
     'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog',
@@ -82,14 +76,46 @@ export default async (ctx: Koa.Context) => {
     }
     return
   }
-  ctx.status = 200
-  ctx.body = {
-    code: ctx.status,
-    msg: ctx.message,
-    data: {
-      name: types[type],
-      page: data.data.page,
-      list: data.data.list
+
+  const resultList = data.data.list
+  if (resultList.length == 0) {
+    ctx.status = 200
+    ctx.body = {
+      code: ctx.status,
+      msg: ctx.message,
+      data: {
+        name: types[type],
+        list: list
+      }
     }
+    return
+  }
+  const end_id = resultList[resultList.length - 1].id
+  list.push(...resultList)
+
+  params.end_id = end_id
+
+  for (let i = 1; i < 10000; i++) {
+    const data = await http.get(
+      'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog',
+      params
+    )
+
+    const resultList = data.data.list
+    if (resultList.length == 0) {
+      ctx.status = 200
+      ctx.body = {
+        code: ctx.status,
+        msg: ctx.message,
+        data: {
+          name: types[type],
+          list: list
+        }
+      }
+      break
+    }
+    const end_id = resultList[resultList.length - 1].id
+    list.push(...resultList)
+    params.end_id = end_id
   }
 }
