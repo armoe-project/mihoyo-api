@@ -7,15 +7,22 @@ import GlobalVar from './data/global-var'
 import OtherUtil from './util/other-util'
 import chalk from 'chalk'
 
+const jsonp = require('koa-jsonp')
+const cors = require('@koa/cors')
 GlobalVar.runtime = OtherUtil.getTimeStamp(false)
 
 const app = new Koa()
+
 const logger = Logger((str) => {
   console.log(
     `[${chalk.hex('#0088FF').bold(Moment().format('YYYY/MM/DD HH:mm:ss'))}]` +
       str
   )
 })
+
+app.use(cors())
+
+app.use(jsonp())
 
 app.use(logger)
 app.use(bodyParser())

@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import axios from 'axios'
 import CryptoUtil from '../util/crypto-util'
+import GlobalVar from '../data/global-var'
 
 export default async (ctx: Koa.Context) => {
   let query: any = {}
@@ -42,9 +43,9 @@ async function sign(cookie: string, id: string | number) {
     },
     {
       headers: {
-        ds: CryptoUtil.genMiHoYoDS230(),
-        'x-rpc-client_type': 4,
-        'x-rpc-app_version': '2.3.0',
+        ds: CryptoUtil.genMiHoYoDS(),
+        'x-rpc-client_type': GlobalVar.client_type,
+        'x-rpc-app_version': GlobalVar.appVer,
         referer: 'https://app.mihoyo.com',
         cookie: cookie
       }

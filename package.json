@@ -9,12 +9,14 @@
     "dev": "ts-node-dev src/app.ts --respawn --transpileOnly"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "crypto": "^1.0.1",
     "form-data": "^3.0.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
+    "koa-jsonp": "^2.0.2",
     "koa-logger": "^3.2.1",
     "koa-router": "^10.0.0",
     "moment": "^2.29.1",

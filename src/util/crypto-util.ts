@@ -1,6 +1,7 @@
 import NodeRSA from 'node-rsa'
 import crypto from 'crypto'
 import OtherUtil from './other-util'
+import GlobalVar from '../data/global-var'
 
 class CryptoUtil {
   static genMiHoYoSign(params: any) {
@@ -26,17 +27,7 @@ class CryptoUtil {
   }
 
   static genMiHoYoDS() {
-    const salt = 'pbcfcvnfsm5s2w4x3lsq8caor7v8nlqm'
-
-    const timestamp = OtherUtil.getTimeStamp(true)
-    const randomStr = Math.random().toString(36).slice(-6)
-    let param = 'salt=' + salt + '&t=' + timestamp + '&r=' + randomStr
-    param = crypto.createHash('md5').update(param).digest('hex')
-    return timestamp + ',' + randomStr + ',' + param
-  }
-
-  static genMiHoYoDS230() {
-    const salt = 'h8w582wxwgqvahcdkpvdhbh2w9casgfl'
+    const salt = GlobalVar.ds_salt
 
     const timestamp = OtherUtil.getTimeStamp(true)
     const randomStr = Math.random().toString(36).slice(-6)
