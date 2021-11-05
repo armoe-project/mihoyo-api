@@ -17,7 +17,7 @@ export default async (ctx: Koa.Context) => {
   )};`
   if (!id) {
     const list: any = []
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 6; i++) {
       const result = await sign(cookie, i)
       list.push(result)
     }
@@ -71,6 +71,9 @@ async function sign(cookie: string, id: string | number) {
 
 function getNameById(id: string | number): string {
   switch (id) {
+    case 6:
+    case '6':
+      return '崩坏：星穹铁道'
     case 5:
     case '5':
       return '大别野'
