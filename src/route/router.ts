@@ -15,6 +15,7 @@ import qrcodeFetch from './auth/login/qrcode/qrcode-fetch'
 import qrcodeQuery from './auth/login/qrcode/qrcode-query'
 import MyWishHistory from './my-wish-history'
 import { resultError, resultOK } from '../module/common'
+import userStatus from './user-status'
 const router: Router = new Router()
 
 const routes = [
@@ -58,7 +59,7 @@ const routes = [
       ctx.status = 200
       ctx.body = resultOK({
         create_mmt: create_mmt.data.mmt_data,
-        geetest_gettype: JSON.parse(geetest_gettype.replace(/\(/,'').replace(/\)/,''))
+        geetest_gettype: JSON.parse(geetest_gettype.replace(/\(/, '').replace(/\)/, ''))
       })
     }
   },
@@ -89,6 +90,10 @@ const routes = [
   {
     path: '/user/info',
     route: UserInfo
+  },
+  {
+    path: '/user/status',
+    route: userStatus
   },
   {
     path: '/bbs/sign',
