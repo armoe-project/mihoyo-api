@@ -26,14 +26,17 @@ export default async (ctx: Koa.Context) => {
   if (!server) {
     server = 'cn_gf01'
   }
-  const ds = cryptoUtil.genMiHoYoDS()
+  const ds = cryptoUtil.genMiHoYoDS({
+    server: server,
+    role_id: uid
+  }, "")
   const cookie =
     'account_id=' +
     ctx.cookies.get('account_id') +
     '; cookie_token=' +
     ctx.cookies.get('cookie_token')
   const data = await axios.get(
-    'https://api-takumi.mihoyo.com/game_record/genshin/api/index',
+    'https://api-takumi.mihoyo.com/game_record/app/genshin/api/index',
     {
       headers: {
         cookie: cookie,

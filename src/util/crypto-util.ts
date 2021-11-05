@@ -26,12 +26,22 @@ class CryptoUtil {
     return crypto.createHmac('sha256', secret).update(data).digest('hex')
   }
 
-  static genMiHoYoDS() {
+  static genMiHoYoDS(params: any = {}, body: string) {
     const salt = GlobalVar.ds_salt
-
+    const queryArr: string[] = []
+    for (const test in params) {
+      queryArr.push(`${test}=${params[test]}`)
+    }
+    queryArr.reverse()
+    let query = ""
+    queryArr.forEach(str => {
+      query += `${str}&`
+    })
+    query = query.substring(0, query.length - 1)
+    console.log(query);
     const timestamp = OtherUtil.getTimeStamp(true)
     const randomStr = Math.random().toString(36).slice(-6)
-    let param = 'salt=' + salt + '&t=' + timestamp + '&r=' + randomStr
+    let param = `salt=${salt}&t=${timestamp}&r=${randomStr}&b=${body}&q=${query}`
     param = crypto.createHash('md5').update(param).digest('hex')
     return timestamp + ',' + randomStr + ',' + param
   }

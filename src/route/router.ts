@@ -14,6 +14,7 @@ import CryptoUtil from '../util/crypto-util'
 import qrcodeFetch from './auth/login/qrcode/qrcode-fetch'
 import qrcodeQuery from './auth/login/qrcode/qrcode-query'
 import MyWishHistory from './my-wish-history'
+import { resultError, resultOK } from '../module/common'
 const router: Router = new Router()
 
 const routes = [
@@ -31,18 +32,34 @@ const routes = [
   {
     path: '/test',
     route: async (ctx: Koa.Context) => {
-      const data = await http.get(
-        'https://api-takumi.mihoyo.com/game_record/genshin/api/activities?server=cn_gf01&role_id=100838389',
-        null,
+      const create_mmt = await http.get(
+        'https://webapi.account.mihoyo.com/Api/create_mmt',
         {
-          cookie: ctx.cookies.request.headers.cookie,
-          'x-rpc-app_version': GlobalVar.appVer,
-          'x-rpc-client_type': 5,
-          ds: CryptoUtil.genMiHoYoDS()
+          scene_type: 1,
+          now: Date.now(),
+          reason: 'user.mihoyo.com%23%2Flogin%2Fpassword',
+          t: Date.now()
+        }
+      )
+      if (create_mmt.code != 200) {
+        ctx.status = 400
+        ctx.body = resultError({
+          error: create_mmt.data.msg,
+          error_code: create_mmt.data.status
+        })
+        return
+      }
+      const geetest_gettype = await http.get(
+        'https://api.geetest.com/gettype.php',
+        {
+          gt: create_mmt.data.mmt_data.gt
         }
       )
       ctx.status = 200
-      ctx.body = data
+      ctx.body = resultOK({
+        create_mmt: create_mmt.data.mmt_data,
+        geetest_gettype: JSON.parse(geetest_gettype.replace(/\(/,'').replace(/\)/,''))
+      })
     }
   },
   {

@@ -6,9 +6,9 @@
  */
 class GlobalVar {
   static runtime: number
-  static client_type = 2
-  static ds_salt = 'fd3ykrh7o1j54g581upo1tvpam0dsgtf'
-  static appVer = '2.7.0'
+  static client_type = 5
+  static ds_salt = 'xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs'
+  static appVer = '2.11.1'
 }
 
 export default GlobalVar
