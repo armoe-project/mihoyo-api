@@ -43,9 +43,9 @@ async function sign(cookie: string, id: string | number) {
     },
     {
       headers: {
-        ds: CryptoUtil.genMiHoYoDS({ gids: id }, `gids=${id}`),
-        'x-rpc-client_type': GlobalVar.client_type,
-        'x-rpc-app_version': GlobalVar.appVer,
+        ds: CryptoUtil.genMiHoYoDS270(),
+        'x-rpc-client_type': 2,
+        'x-rpc-app_version': '2.7.0',
         referer: 'https://app.mihoyo.com',
         cookie: cookie
       }

@@ -46,6 +46,16 @@ class CryptoUtil {
     return timestamp + ',' + randomStr + ',' + param
   }
 
+  static genMiHoYoDS270() {
+    const salt = 'fd3ykrh7o1j54g581upo1tvpam0dsgtf'
+
+    const timestamp = OtherUtil.getTimeStamp(true)
+    const randomStr = Math.random().toString(36).slice(-6)
+    let param = 'salt=' + salt + '&t=' + timestamp + '&r=' + randomStr
+    param = crypto.createHash('md5').update(param).digest('hex')
+    return timestamp + ',' + randomStr + ',' + param
+  }
+
   static getMiHoYoRSAPassword(password: string) {
     // 公钥
     const _pubKey =
