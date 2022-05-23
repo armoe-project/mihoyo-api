@@ -36,7 +36,7 @@ export default async (ctx: Koa.Context) => {
     '; cookie_token=' +
     ctx.cookies.get('cookie_token')
   const data = await axios.get(
-    'https://api-takumi.mihoyo.com/game_record/app/genshin/api/index',
+    'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/index',
     {
       headers: {
         cookie: cookie,

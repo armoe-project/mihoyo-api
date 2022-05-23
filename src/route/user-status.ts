@@ -56,7 +56,7 @@ export default async (ctx: Koa.Context) => {
         role_id: uid
     }
 
-    const data = await Http.get("https://api-takumi.mihoyo.com/game_record/app/genshin/api/dailyNote", params, {
+    const data = await Http.get("https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote", params, {
         cookie: cookie,
         'x-rpc-app_version': GlobalVar.appVer,
         'x-rpc-client_type': GlobalVar.client_type,
