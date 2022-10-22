@@ -1,0 +1,20 @@
+[package]
+name = "mihoyo-api"
+version = "0.1.0"
+authors = ["ZhenXin <qgzhenxin@qq.com>"]
+edition = "2021"
+description = "miHoYo API"
+homepage = "https://github.com/armoe-project/mihoyo-api"
+repository = "https://github.com/armoe-project/mihoyo-api"
+license = "GPL-3.0-only"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = { version = "0.5.0-rc.2", features = ["json"] }
+reqwest = { version = "0.11.12", features = ["json", "cookies"] }
+chrono = "0.4.22"
+lazy_static = "1.4.0"
+rust-crypto = "0.2.36"
+rand = "0.8.5"
+urlencoding = "2.1.2"
