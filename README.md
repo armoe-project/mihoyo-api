@@ -74,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * [Rust](https://www.rust-lang.org/zh-CN/)
 * [Rocket](https://rocket.rs/)
 
-[banner]: https://socialify.git.ci/armoe-project/mihoyo-api/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light
+[banner]: https://socialify.git.ci/armoe-project/mihoyo-api/image?forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light
 
 [rust]: https://img.shields.io/badge/rust-1.64.0--2021-blue?style=for-the-badge
 

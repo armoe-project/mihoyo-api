@@ -27,7 +27,7 @@ pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> 
 #[get("/enka/<uid>")]
 pub async fn enka(uid: &str) -> Value {
     if !common::check_uid(uid) {
-        return result::error("UID format error!");
+        return result::error("UID format error, it should be a 9-bit integer!");
     }
     let url = format!("https://enka.network/u/{}/__data.json", uid);
     let result = request::get(&url, None, None).await;
