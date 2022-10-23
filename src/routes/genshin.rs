@@ -7,6 +7,10 @@ use crate::{
 
 #[get("/index/<uid>?<server>")]
 pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> Value {
+    if !common::check_uid(uid) {
+        return result::error("UID format is wrong, should be 9 digits integer!");
+    }
+
     let server = match server {
         Some(v) => {
             if v.is_empty() {
@@ -17,6 +21,7 @@ pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> 
         }
         None => "cn_gf01",
     };
+    
     let result = genshin::index(uid, server, cookies).await;
     match result {
         Ok(data) => result::success(Some(data)),
@@ -27,7 +32,7 @@ pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> 
 #[get("/enka/<uid>")]
 pub async fn enka(uid: &str) -> Value {
     if !common::check_uid(uid) {
-        return result::error("UID format error, it should be a 9-bit integer!");
+        return result::error("UID format is wrong, should be 9 digits integer!");
     }
     let url = format!("https://enka.network/u/{}/__data.json", uid);
     let result = request::get(&url, None, None).await;
