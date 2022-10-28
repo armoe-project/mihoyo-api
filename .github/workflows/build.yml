@@ -106,7 +106,5 @@ jobs:
           path: artifacts
       - uses: ncipollo/release-action@v1
         with:
-          name: Test Release
-          tag: test-release
           artifacts: artifacts/**
           token: ${{ secrets.GITHUB_TOKEN }}
