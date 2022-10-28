@@ -1,0 +1,112 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - "main"
+
+jobs:
+  Linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          target: x86_64-unknown-linux-musl
+      - name: Build OpenSSL
+        run: |
+          wget https://www.openssl.org/source/openssl-1.1.1q.tar.gz
+          tar -xvf openssl-1.1.1q.tar.gz
+          cd openssl-1.1.1q
+          ./config
+          sudo make && sudo make install
+      - name: Install Packages
+        run: |
+          sudo apt update
+          sudo apt install musl-tools -y
+      - uses: actions-rs/cargo@v1
+        env:
+          OPENSSL_DIR: /usr/local
+        with:
+          command: build
+          args: --release --target x86_64-unknown-linux-musl
+      - name: Setup artifacts
+        run: |
+          mkdir artifacts
+          mv target/x86_64-unknown-linux-musl/release/mihoyo-api artifacts/mihoyo-api_x86_64-linux
+      - uses: actions/upload-artifact@v3
+        with:
+          name: x86_64-linux
+          path: artifacts/**
+  MacOS:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          target: x86_64-apple-darwin
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target x86_64-apple-darwin
+      - name: Setup artifacts
+        run: |
+          mkdir artifacts
+          mv target/x86_64-apple-darwin/release/mihoyo-api artifacts/mihoyo-api_x86_64-apple-darwin
+      - uses: actions/upload-artifact@v3
+        with:
+          name: x86_64-apple-darwin
+          path: artifacts/**
+  Windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          target: x86_64-pc-windows-gnu
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target x86_64-pc-windows-gnu
+      - name: Setup artifacts
+        run: |
+          mkdir artifacts
+          mv target/x86_64-pc-windows-gnu/release/mihoyo-api.exe artifacts/mihoyo-api_x86_64-windows.exe
+      - uses: actions/upload-artifact@v3
+        with:
+          name: x86_64-windows
+          path: artifacts/**
+  Release:
+    runs-on: ubuntu-latest
+    needs:
+      - Linux
+      - MacOS
+      - Windows
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: x86_64-linux
+          path: artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: x86_64-apple-darwin
+          path: artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: x86_64-windows
+          path: artifacts
+      - uses: ncipollo/release-action@v1
+        with:
+          name: Test Release
+          tag: test-release
+          artifacts: artifacts/**
+          token: ${{ secrets.GITHUB_TOKEN }}
