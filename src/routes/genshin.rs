@@ -8,7 +8,7 @@ use crate::{
 #[get("/index/<uid>?<server>")]
 pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> Value {
     if !common::check_uid(uid) {
-        return result::error("UID format is wrong, should be 9 digits integer!");
+        return result::error("UID格式错误, 应为9位整数!");
     }
 
     let server = match server {
@@ -21,25 +21,32 @@ pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> 
         }
         None => "cn_gf01",
     };
-    
+
     let result = genshin::index(uid, server, cookies).await;
     match result {
-        Ok(data) => result::success(Some(data)),
-        Err(_) => result::error("Failed to get character information!"),
+        Ok(data) => {
+            let code = data.get("retcode").unwrap().as_i64().unwrap();
+            println!("{}", code);
+            if code != 0 {
+                return result::error(data.get("message").unwrap().as_str().unwrap());
+            }
+            result::success(Some(data))
+        }
+        Err(_) => result::error("无法获取角色信息!"),
     }
 }
 
 #[get("/enka/<uid>")]
 pub async fn enka(uid: &str) -> Value {
     if !common::check_uid(uid) {
-        return result::error("UID format is wrong, should be 9 digits integer!");
+        return result::error("UID格式错误, 应为9位整数!");
     }
     let url = format!("https://enka.network/u/{}/__data.json", uid);
     let result = request::get(&url, None, None).await;
     match result {
         Ok(data) => {
             if data.get("uid").is_none() {
-                return result::error(format!("No data found for UID: {}!", uid).as_str());
+                return result::error(format!("未查询到UID为 {} 的数据!", uid).as_str());
             }
             return result::success(Some(data));
         }

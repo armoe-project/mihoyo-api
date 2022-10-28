@@ -19,10 +19,7 @@ async fn request(
     headers: Option<HeaderMap<HeaderValue>>,
     cookies: Option<&str>,
 ) -> Result<Value, Box<dyn std::error::Error>> {
-    let client = reqwest::Client::builder()
-        .cookie_store(true)
-        .build()
-        .unwrap();
+    let client = reqwest::Client::new();
 
     let req = client.request(method, url);
     let req = match cookies {
