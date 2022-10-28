@@ -39,14 +39,10 @@ log_level = "normal" # 日志等级
 ## 开发
 
 ```shell
-# 设置环境
-rustup default stable-gnu # 切换后请确保安装MingW
 # 克隆代码
 git clone -b rust https://github.com/armoe-project/mihoyo-api.git
 # 运行开发服务器
 cargo run
-# 构建生产环境二进制
-cargo build --release
 ```
 
 ## 开源协议
