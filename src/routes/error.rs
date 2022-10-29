@@ -8,14 +8,14 @@ use crate::utils::{common, result};
 
 #[catch(default)]
 pub fn default(status: Status, req: &Request<'_>) -> Value {
-    json!({
-        "code": status.code,
-        "msg": "Unknown Error",
-        "data": {
+    result::build(
+        status.code,
+        "Unknown Error",
+        Some(json!({
             "uri": req.uri(),
             "timestamp": common::timestamp()
-        }
-    })
+        })),
+    )
 }
 
 #[catch(404)]
