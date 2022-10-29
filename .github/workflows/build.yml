@@ -16,8 +16,6 @@ jobs:
           override: true
           target: x86_64-unknown-linux-musl
       - uses: actions-rs/cargo@v1
-        env:
-          OPENSSL_DIR: /usr/local
         with:
           use-cross: true
           command: build

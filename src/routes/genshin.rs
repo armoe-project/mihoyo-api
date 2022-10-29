@@ -30,7 +30,7 @@ pub fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> Value 
             if code != 0 {
                 return result::error(data.get("message").unwrap().as_str().unwrap());
             }
-            result::success(Some(data))
+            result::success(Some(data.get("data")))
         }
         Err(_) => result::error("无法获取角色信息!"),
     }
