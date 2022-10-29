@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[get("/index/<uid>?<server>")]
-pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> Value {
+pub fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> Value {
     if !common::check_uid(uid) {
         return result::error("UID格式错误, 应为9位整数!");
     }
@@ -22,7 +22,7 @@ pub async fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> 
         None => "cn_gf01",
     };
 
-    let result = genshin::index(uid, server, cookies).await;
+    let result = genshin::index(uid, server, cookies);
     match result {
         Ok(data) => {
             let code = data.get("retcode").unwrap().as_i64().unwrap();
@@ -42,7 +42,7 @@ pub async fn enka(uid: &str) -> Value {
         return result::error("UID格式错误, 应为9位整数!");
     }
     let url = format!("https://enka.network/u/{}/__data.json", uid);
-    let result = request::get(&url, None, None).await;
+    let result = request::get(&url, None, None);
     match result {
         Ok(data) => {
             if data.get("uid").is_none() {

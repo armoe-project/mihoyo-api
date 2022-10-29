@@ -1,11 +1,10 @@
 use rand::{thread_rng, Rng};
-use reqwest::header::HeaderMap;
 use rocket::http::CookieJar;
 
 use crate::utils::{common, crypto::md5};
 
-pub fn get_headers(query: Option<&str>, body: Option<&str>) -> HeaderMap {
-    let mut headers = reqwest::header::HeaderMap::new();
+pub fn get_headers(query: Option<&str>, body: Option<&str>) -> Vec<(String, String)> {
+    let mut headers = Vec::new();
 
     let app_version = "2.37.1";
     let cleint_type = "5";
@@ -15,12 +14,12 @@ pub fn get_headers(query: Option<&str>, body: Option<&str>) -> HeaderMap {
     let ua = format!("Mozilla/5.0 (Linux; Android 12; {}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.73 Mobile Safari/537.36 miHoYoBBS/{}", device, app_version);
 
     // 米游社相关
-    headers.insert("x-rpc-app_version", app_version.parse().unwrap());
-    headers.insert("x-rpc-client_type", cleint_type.parse().unwrap());
-    headers.insert("ds", ds.parse().unwrap());
+    headers.push(("x-rpc-app_version".to_string(), app_version.to_string()));
+    headers.push(("x-rpc-client_type".to_string(), cleint_type.to_string()));
+    headers.push(("ds".to_string(), ds));
 
     // 常规请求头
-    headers.insert("user-agent", ua.parse().unwrap());
+    headers.push(("user-agent".to_string(), ua));
 
     return headers;
 }

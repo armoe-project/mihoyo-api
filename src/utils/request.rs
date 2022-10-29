@@ -1,36 +1,32 @@
-use reqwest::{
-    header::{HeaderMap, HeaderValue},
-    Method,
-};
 use rocket::serde::json::Value;
 
-pub async fn get(
+pub fn get(
     url: &str,
-    headers: Option<HeaderMap<HeaderValue>>,
+    headers: Option<Vec<(String, String)>>,
     cookies: Option<&str>,
 ) -> Result<Value, Box<dyn std::error::Error>> {
-    let res = request(Method::GET, url, headers, cookies).await?;
+    let res = request("GET", url, headers, cookies)?;
     Ok(res)
 }
 
-async fn request(
-    method: Method,
+fn request(
+    method: &str,
     url: &str,
-    headers: Option<HeaderMap<HeaderValue>>,
+    headers: Option<Vec<(String, String)>>,
     cookies: Option<&str>,
 ) -> Result<Value, Box<dyn std::error::Error>> {
-    let client = reqwest::Client::new();
+    let mut request = ureq::request(method, url);
 
-    let req = client.request(method, url);
-    let req = match cookies {
-        Some(v) => req.header("cookie", v),
-        None => req,
-    };
+    if cookies.is_some() {
+        request = request.set("cookie", cookies.unwrap());
+    }
 
-    let req = match headers {
-        Some(data) => req.headers(data),
-        None => req,
-    };
-    let res = req.send().await?.json().await?;
+    if headers.is_some() {
+        for ele in headers.unwrap() {
+            request = request.set(&ele.0, &ele.1);
+        }
+    }
+
+    let res = request.call()?.into_json()?;
     Ok(res)
 }

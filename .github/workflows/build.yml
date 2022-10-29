@@ -6,7 +6,7 @@ on:
       - "v*"
 
 jobs:
-  Linux:
+  x86_64-unknown-linux-musl:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,17 +15,6 @@ jobs:
           toolchain: stable
           override: true
           target: x86_64-unknown-linux-musl
-      - name: Build OpenSSL
-        run: |
-          wget https://www.openssl.org/source/openssl-1.1.1q.tar.gz
-          tar -xvf openssl-1.1.1q.tar.gz
-          cd openssl-1.1.1q
-          ./config
-          sudo make && sudo make install
-      - name: Install Packages
-        run: |
-          sudo apt update
-          sudo apt install musl-tools -y
       - uses: actions-rs/cargo@v1
         env:
           OPENSSL_DIR: /usr/local
@@ -35,12 +24,12 @@ jobs:
       - name: Setup artifacts
         run: |
           mkdir artifacts
-          mv target/x86_64-unknown-linux-musl/release/mihoyo-api artifacts/mihoyo-api_x86_64-linux
+          mv target/x86_64-unknown-linux-musl/release/mihoyo-api artifacts/mihoyo-api_x86_64-unknown-linux-musl
       - uses: actions/upload-artifact@v3
         with:
-          name: x86_64-linux
+          name: x86_64-unknown-linux-musl
           path: artifacts/**
-  MacOS:
+  x86_64-apple-darwin:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -61,7 +50,7 @@ jobs:
         with:
           name: x86_64-apple-darwin
           path: artifacts/**
-  Windows:
+  x86_64-pc-windows-gnu:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -77,22 +66,22 @@ jobs:
       - name: Setup artifacts
         run: |
           mkdir artifacts
-          mv target/x86_64-pc-windows-gnu/release/mihoyo-api.exe artifacts/mihoyo-api_x86_64-windows.exe
+          mv target/x86_64-pc-windows-gnu/release/mihoyo-api.exe artifacts/mihoyo-api_x86_64-pc-windows-gnu.exe
       - uses: actions/upload-artifact@v3
         with:
-          name: x86_64-windows
+          name: x86_64-pc-windows-gnu
           path: artifacts/**
   Release:
     runs-on: ubuntu-latest
     needs:
-      - Linux
-      - MacOS
-      - Windows
+      - x86_64-unknown-linux-musl
+      - x86_64-apple-darwin
+      - x86_64-pc-windows-gnu
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: x86_64-linux
+          name: x86_64-unknown-linux-musl
           path: artifacts
       - uses: actions/download-artifact@v3
         with:
@@ -100,7 +89,7 @@ jobs:
           path: artifacts
       - uses: actions/download-artifact@v3
         with:
-          name: x86_64-windows
+          name: x86_64-pc-windows-gnu
           path: artifacts
       - uses: ncipollo/release-action@v1
         with:
