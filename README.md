@@ -20,7 +20,7 @@
 
 ## 使用
 
-* 前往 [Release](release) 下载对应设备二进制文件
+* 前往 [Releases](https://github.com/armoe-project/mihoyo-api/releases) 下载对应设备二进制文件
 * 运行二进制文件
   
 ## 配置
