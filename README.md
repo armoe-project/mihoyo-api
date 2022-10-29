@@ -40,7 +40,7 @@ log_level = "normal" # 日志等级
 
 ```shell
 # 克隆代码
-git clone -b rust https://github.com/armoe-project/mihoyo-api.git
+git clone https://github.com/armoe-project/mihoyo-api.git
 # 运行开发服务器
 cargo run
 ```
