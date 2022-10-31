@@ -1,32 +1,22 @@
 use rocket::{http::CookieJar, serde::json::Value};
 
 use crate::{
-    api::genshin,
+    api::{common::get_server, genshin},
     utils::{common, request, result},
 };
 
-#[get("/index/<uid>?<server>")]
-pub fn index(cookies: &CookieJar<'_>, uid: &str, server: Option<&str>) -> Value {
+#[get("/index/<uid>")]
+pub fn index(cookies: &CookieJar<'_>, uid: &str) -> Value {
     if !common::check_uid(uid) {
         return result::error("UID格式错误, 应为9位整数!");
     }
 
-    let server = match server {
-        Some(v) => {
-            if v.is_empty() {
-                "cn_gf01"
-            } else {
-                v
-            }
-        }
-        None => "cn_gf01",
-    };
+    let server = get_server(uid);
 
     let result = genshin::index(uid, server, cookies);
     match result {
         Ok(data) => {
             let code = data.get("retcode").unwrap().as_i64().unwrap();
-            println!("{}", code);
             if code != 0 {
                 return result::error(data.get("message").unwrap().as_str().unwrap());
             }

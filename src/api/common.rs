@@ -3,12 +3,44 @@ use rocket::http::CookieJar;
 
 use crate::utils::{common, crypto::md5};
 
-pub fn get_headers(query: Option<&str>, body: Option<&str>) -> Vec<(String, String)> {
+pub fn get_server(uid: &str) -> &str {
+    match uid[0..1].parse().unwrap() {
+        5 => "cn_qd01",         // 渠道服
+        6 => "os_usa",          // 美服
+        7 => "os_euro",         // 欧服
+        8 => "os_asia",         // 亚服
+        9 => "os_cht",          // 港澳台服
+        1 | 2 | _ => "cn_gf01", // 官服
+    }
+}
+
+pub fn get_host(server: &str, record: bool) -> &str {
+    match server {
+        // 国际服
+        "os_usa" | "os_euro" | "os_asia" | "os_cht" => {
+            if record {
+                "https://bbs-api-os.mihoyo.com"
+            } else {
+                "https://api-os-takumi.mihoyo.com"
+            }
+        }
+        // 国服
+        "cn_gf01" | "cn_qd01" | _ => {
+            if record {
+                "https://api-takumi-record.mihoyo.com"
+            } else {
+                "https://api-takumi.mihoyo.com"
+            }
+        }
+    }
+}
+
+pub fn get_headers(query: Option<&str>, body: Option<&str>, server: &str) -> Vec<(String, String)> {
     let mut headers = Vec::new();
 
     let app_version = "2.37.1";
     let cleint_type = "5";
-    let ds = get_ds(query, body);
+    let ds = get_ds(query, body, server);
     let device = md5(query.unwrap_or_else(|| "no query"));
 
     let ua = format!("Mozilla/5.0 (Linux; Android 12; {}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.73 Mobile Safari/537.36 miHoYoBBS/{}", device, app_version);
@@ -24,7 +56,7 @@ pub fn get_headers(query: Option<&str>, body: Option<&str>) -> Vec<(String, Stri
     return headers;
 }
 
-fn get_ds(query: Option<&str>, body: Option<&str>) -> String {
+fn get_ds(query: Option<&str>, body: Option<&str>, server: &str) -> String {
     let query = query.unwrap_or_else(|| "");
     let body = body.unwrap_or_else(|| "");
 
