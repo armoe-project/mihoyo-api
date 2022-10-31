@@ -22,6 +22,12 @@
 
 * 前往 [Releases](https://github.com/armoe-project/mihoyo-api/releases) 下载对应设备二进制文件
 * 运行二进制文件
+
+## 文档
+
+本项目使用 [Apifox](https://www.apifox.cn/) 管理文档
+
+[点击查看使用文档](https://www.apifox.cn/apidoc/shared-e63772a9-debc-4e57-b30d-568bead9c81c)
   
 ## 配置
 
