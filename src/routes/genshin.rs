@@ -23,7 +23,7 @@ pub fn index(cookies: &CookieJar<'_>, uid: &str) -> Value {
             }
             result::success(Some(data.get("data")))
         }
-        Err(_) => result::error("无法获取角色信息!"),
+        Err(_) => result::error("无法获取首页数据!"),
     }
 }
 
@@ -50,6 +50,27 @@ pub fn spiral_abyss(cookies: &CookieJar<'_>, uid: &str, schedule_type: Option<u8
     }
 }
 
+#[get("/character/<uid>")]
+pub fn character(cookies: &CookieJar<'_>, uid: &str) -> Value {
+    if !common::check_uid(uid) {
+        return result::error("UID格式错误, 应为9位整数!");
+    }
+
+    let server = get_server(uid);
+
+    let result = genshin::character(uid, server, cookies);
+    match result {
+        Ok(data) => {
+            let code = data.get("retcode").unwrap().as_i64().unwrap();
+            if code != 0 {
+                return result::error(data.get("message").unwrap().as_str().unwrap());
+            }
+            result::success(Some(data.get("data")))
+        }
+        Err(_) => result::error("无法获取角色详情!"),
+    }
+}
+
 #[get("/enka/<uid>")]
 pub fn enka(uid: &str) -> Value {
     if !common::check_uid(uid) {
@@ -64,6 +85,6 @@ pub fn enka(uid: &str) -> Value {
             }
             return result::success(Some(data));
         }
-        Err(err) => result::error(err.to_string().as_str()),
+        Err(_) => result::error("无法获取角色数据!"),
     }
 }

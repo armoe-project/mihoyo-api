@@ -17,7 +17,12 @@ fn rocket() -> _ {
         .configure(config)
         .mount(
             "/genshin",
-            routes![genshin::index, genshin::spiral_abyss, genshin::enka,],
+            routes![
+                genshin::index,
+                genshin::spiral_abyss,
+                genshin::character,
+                genshin::enka,
+            ],
         )
         .register(
             "/",

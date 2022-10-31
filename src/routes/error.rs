@@ -1,10 +1,6 @@
-use rocket::{
-    http::Status,
-    request::Request,
-    serde::json::{serde_json::json, Value},
-};
-
 use crate::utils::{common, result};
+use rocket::{http::Status, Request};
+use ureq::{json, serde_json::Value};
 
 #[catch(default)]
 pub fn default(status: Status, req: &Request<'_>) -> Value {

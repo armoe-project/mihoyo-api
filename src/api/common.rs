@@ -1,5 +1,6 @@
 use rand::{thread_rng, Rng};
 use rocket::http::CookieJar;
+use ureq::{json, serde_json::Value};
 
 use crate::utils::{common, crypto::md5};
 
@@ -35,7 +36,11 @@ pub fn get_host(server: &str, record: bool) -> &str {
     }
 }
 
-pub fn get_headers(query: Option<&str>, body: Option<&str>, server: &str) -> Vec<(String, String)> {
+pub fn get_headers(
+    query: Option<&str>,
+    body: Option<Value>,
+    server: &str,
+) -> Vec<(String, String)> {
     let mut headers = Vec::new();
 
     let app_version = "2.37.1";
@@ -56,9 +61,9 @@ pub fn get_headers(query: Option<&str>, body: Option<&str>, server: &str) -> Vec
     return headers;
 }
 
-fn get_ds(query: Option<&str>, body: Option<&str>, server: &str) -> String {
+fn get_ds(query: Option<&str>, body: Option<Value>, server: &str) -> String {
     let query = query.unwrap_or_else(|| "");
-    let body = body.unwrap_or_else(|| "");
+    let body = body.unwrap_or_else(|| json!({}));
 
     let salt = match server {
         // 国际服

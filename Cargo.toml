@@ -12,7 +12,7 @@ license = "GPL-3.0-only"
 
 [dependencies]
 rocket = { version = "0.5.0-rc.2", features = ["json"] }
-ureq = { version = "*", features = ["json", "charset"] }
+ureq = { version = "2.5.0", features = ["json"] }
 chrono = "0.4.22"
 rust-crypto = "0.2.36"
 rand = "0.8.5"
