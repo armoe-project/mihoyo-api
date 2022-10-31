@@ -14,7 +14,6 @@ pub fn index(cookies: &CookieJar<'_>, uid: &str) -> Value {
     let server = get_server(uid);
 
     let result = genshin::index(uid, server, cookies);
-    println!("{:?}", result);
     match result {
         Ok(data) => {
             let code = data.get("retcode").unwrap().as_i64().unwrap();
@@ -68,6 +67,27 @@ pub fn character(cookies: &CookieJar<'_>, uid: &str) -> Value {
             result::success(Some(data.get("data")))
         }
         Err(_) => result::error("无法获取角色详情!"),
+    }
+}
+
+#[get("/daily_note/<uid>")]
+pub fn daily_note(cookies: &CookieJar<'_>, uid: &str) -> Value {
+    if !common::check_uid(uid) {
+        return result::error("UID格式错误, 应为9位整数!");
+    }
+
+    let server = get_server(uid);
+
+    let result = genshin::daily_note(uid, server, cookies);
+    match result {
+        Ok(data) => {
+            let code = data.get("retcode").unwrap().as_i64().unwrap();
+            if code != 0 {
+                return result::error(data.get("message").unwrap().as_str().unwrap());
+            }
+            result::success(Some(data.get("data")))
+        }
+        Err(_) => result::error("无法获取便签数据!"),
     }
 }
 

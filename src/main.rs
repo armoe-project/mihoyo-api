@@ -21,6 +21,7 @@ fn rocket() -> _ {
                 genshin::index,
                 genshin::spiral_abyss,
                 genshin::character,
+                genshin::daily_note,
                 genshin::enka,
             ],
         )
