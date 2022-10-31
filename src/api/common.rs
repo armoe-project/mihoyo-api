@@ -60,7 +60,12 @@ fn get_ds(query: Option<&str>, body: Option<&str>, server: &str) -> String {
     let query = query.unwrap_or_else(|| "");
     let body = body.unwrap_or_else(|| "");
 
-    let salt = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs";
+    let salt = match server {
+        // 国际服
+        "os_usa" | "os_euro" | "os_asia" | "os_cht" => "okr4obncj8bw5a65hbnn5oo6ixjc3l9w",
+        // 国服
+        "cn_gf01" | "cn_qd01" | _ => "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs",
+    };
     let time = common::timestamp() / 1000;
     let random = thread_rng().gen_range(100000..999999);
     let params = format!(

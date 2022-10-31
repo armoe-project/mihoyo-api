@@ -15,7 +15,10 @@ fn rocket() -> _ {
     config.log_level = LogLevel::Normal; // 日志等级
     rocket::build()
         .configure(config)
-        .mount("/genshin", routes![genshin::enka, genshin::index])
+        .mount(
+            "/genshin",
+            routes![genshin::index, genshin::spiral_abyss, genshin::enka,],
+        )
         .register(
             "/",
             catchers![

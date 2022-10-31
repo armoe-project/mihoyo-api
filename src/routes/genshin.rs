@@ -14,6 +14,7 @@ pub fn index(cookies: &CookieJar<'_>, uid: &str) -> Value {
     let server = get_server(uid);
 
     let result = genshin::index(uid, server, cookies);
+    println!("{:?}", result);
     match result {
         Ok(data) => {
             let code = data.get("retcode").unwrap().as_i64().unwrap();
@@ -26,8 +27,31 @@ pub fn index(cookies: &CookieJar<'_>, uid: &str) -> Value {
     }
 }
 
+#[get("/spiral_abyss/<uid>?<schedule_type>")]
+pub fn spiral_abyss(cookies: &CookieJar<'_>, uid: &str, schedule_type: Option<u8>) -> Value {
+    if !common::check_uid(uid) {
+        return result::error("UID格式错误, 应为9位整数!");
+    }
+
+    let schedule_type = schedule_type.unwrap_or_else(|| 1);
+
+    let server = get_server(uid);
+
+    let result = genshin::spiral_abyss(uid, schedule_type, server, cookies);
+    match result {
+        Ok(data) => {
+            let code = data.get("retcode").unwrap().as_i64().unwrap();
+            if code != 0 {
+                return result::error(data.get("message").unwrap().as_str().unwrap());
+            }
+            result::success(Some(data.get("data")))
+        }
+        Err(_) => result::error("无法获取深渊数据!"),
+    }
+}
+
 #[get("/enka/<uid>")]
-pub async fn enka(uid: &str) -> Value {
+pub fn enka(uid: &str) -> Value {
     if !common::check_uid(uid) {
         return result::error("UID格式错误, 应为9位整数!");
     }
