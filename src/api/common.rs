@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 use rocket::http::CookieJar;
-use ureq::{json, serde_json::Value};
+use ureq::serde_json::Value;
 
 use crate::utils::{common, crypto::md5};
 
