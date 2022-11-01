@@ -42,21 +42,38 @@ pub fn get_headers(
     server: &str,
 ) -> Vec<(String, String)> {
     let mut headers = Vec::new();
+    let app_version;
+    let client_type;
+    let requested_with;
+    let origin;
+    let referer;
+    match server {
+        // 国际服
+        "os_usa" | "os_euro" | "os_asia" | "os_cht" => {
+            app_version = "2.9.0";
+            client_type = "2";
+            requested_with = "com.mihoyo.hoyolab";
+            origin = "https://webstatic-sea.hoyolab.com";
+            referer = "https://webstatic-sea.hoyolab.com";
+        }
+        // 国服
+        "cn_gf01" | "cn_qd01" | _ => {
+            app_version = "2.37.1";
+            client_type = "5";
+            requested_with = "com.mihoyo.hyperion";
+            origin = "https://webstatic.mihoyo.com";
+            referer = "https://webstatic.mihoyo.com";
+        }
+    };
 
-    let app_version = "2.37.1";
-    let cleint_type = "5";
     let ds = get_ds(query, body, server);
-    let device = md5(query.unwrap_or_else(|| "no query"));
-
-    let ua = format!("Mozilla/5.0 (Linux; Android 12; {}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.73 Mobile Safari/537.36 miHoYoBBS/{}", device, app_version);
-
     // 米游社相关
     headers.push(("x-rpc-app_version".to_string(), app_version.to_string()));
-    headers.push(("x-rpc-client_type".to_string(), cleint_type.to_string()));
+    headers.push(("x-rpc-client_type".to_string(), client_type.to_string()));
+    headers.push(("x-requested_with".to_string(), requested_with.to_string()));
+    headers.push(("origin".to_string(), origin.to_string()));
+    headers.push(("referer".to_string(), referer.to_string()));
     headers.push(("ds".to_string(), ds));
-
-    // 常规请求头
-    headers.push(("user-agent".to_string(), ua));
 
     return headers;
 }
