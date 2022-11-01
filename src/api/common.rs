@@ -80,7 +80,10 @@ pub fn get_headers(
 
 fn get_ds(query: Option<&str>, body: Option<Value>, server: &str) -> String {
     let query = query.unwrap_or_else(|| "");
-    let body = body.unwrap_or_else(|| json!({}));
+    let body = match body {
+        Some(_body) => _body.to_string(),
+        None => "".to_string(),
+    };
 
     let salt = match server {
         // 国际服
