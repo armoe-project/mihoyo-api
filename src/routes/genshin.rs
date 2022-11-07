@@ -1,13 +1,7 @@
-use rocket::{
-    http::{hyper::header, CookieJar},
-    serde::json::Value,
-};
+use rocket::{http::CookieJar, serde::json::Value};
 
 use crate::{
-    api::{
-        common::{get_headers, get_server},
-        genshin,
-    },
+    api::{common::get_server, genshin},
     utils::{common, request, result},
 };
 
