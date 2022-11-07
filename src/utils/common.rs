@@ -14,3 +14,7 @@ pub fn check_uid(uid: &str) -> bool {
     }
     true
 }
+
+pub fn app_version() -> &'static str {
+    env!("CARGO_PKG_VERSION")
+}

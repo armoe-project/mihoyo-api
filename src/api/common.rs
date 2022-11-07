@@ -75,6 +75,11 @@ pub fn get_headers(
     headers.push(("referer".to_string(), referer.to_string()));
     headers.push(("ds".to_string(), ds));
 
+    // 常规请求头
+    headers.push((
+        "user-agent".to_string(),
+        format!("mihoyo-api/{}", common::app_version()),
+    ));
     return headers;
 }
 

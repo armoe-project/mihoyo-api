@@ -3,7 +3,7 @@ extern crate rocket;
 
 use rocket::{log::LogLevel, Config};
 
-use routes::{error, genshin};
+use routes::{error, genshin, index};
 
 pub mod api;
 pub mod routes;
@@ -15,6 +15,7 @@ fn rocket() -> _ {
     config.log_level = LogLevel::Normal; // 日志等级
     rocket::build()
         .configure(config)
+        .mount("/", routes![index::get_index, index::post_index])
         .mount(
             "/genshin",
             routes![

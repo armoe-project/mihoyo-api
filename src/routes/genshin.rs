@@ -1,7 +1,13 @@
-use rocket::{http::CookieJar, serde::json::Value};
+use rocket::{
+    http::{hyper::header, CookieJar},
+    serde::json::Value,
+};
 
 use crate::{
-    api::{common::get_server, genshin},
+    api::{
+        common::{get_headers, get_server},
+        genshin,
+    },
     utils::{common, request, result},
 };
 
@@ -97,7 +103,11 @@ pub fn enka(uid: &str) -> Value {
         return result::error("UID格式错误, 应为9位整数!");
     }
     let url = format!("https://enka.network/u/{}/__data.json", uid);
-    let result = request::get(&url, None, None);
+    let headers = vec![(
+        "user-agent".to_string(),
+        format!("mihoyo-api/{}", common::app_version()),
+    )];
+    let result = request::get(&url, Some(headers), None);
     match result {
         Ok(data) => {
             if data.get("uid").is_none() {
