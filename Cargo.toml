@@ -1,6 +1,6 @@
 [package]
 name = "mihoyo-api"
-version = "0.1.5-snapshot"
+version = "0.1.6-snapshot"
 authors = ["ZhenXin <qgzhenxin@qq.com>"]
 edition = "2021"
 description = "miHoYo API"
