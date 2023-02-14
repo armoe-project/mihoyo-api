@@ -96,19 +96,31 @@ pub fn enka(uid: &str) -> Value {
     if !common::check_uid(uid) {
         return result::error("UID格式错误, 应为9位整数!");
     }
-    let url = format!("https://enka.network/u/{}/__data.json", uid);
+    let url = format!("https://enka.network/api/uid/{}/", uid);
     let headers = vec![(
         "user-agent".to_string(),
         format!("mihoyo-api/{}", common::app_version()),
     )];
     let result = request::get(&url, Some(headers), None);
     match result {
-        Ok(data) => {
-            if data.get("uid").is_none() {
-                return result::error(format!("未查询到UID为 {} 的数据!", uid).as_str());
-            }
-            return result::success(Some(data));
-        }
-        Err(_) => result::error("无法获取角色数据!"),
+        Ok(data) => result::success(Some(data)),
+        Err(_) => result::error(format!("未查询到UID为 {} 的数据!", uid).as_str()),
+    }
+}
+
+#[get("/enka/<uid>/info")]
+pub fn enka_info(uid: &str) -> Value {
+    if !common::check_uid(uid) {
+        return result::error("UID格式错误, 应为9位整数!");
+    }
+    let url = format!("https://enka.network/api/uid/{}/?info", uid);
+    let headers = vec![(
+        "user-agent".to_string(),
+        format!("mihoyo-api/{}", common::app_version()),
+    )];
+    let result = request::get(&url, Some(headers), None);
+    match result {
+        Ok(data) => result::success(Some(data)),
+        Err(_) => result::error(format!("未查询到UID为 {} 的数据!", uid).as_str()),
     }
 }

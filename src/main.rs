@@ -24,6 +24,7 @@ fn rocket() -> _ {
                 genshin::character,
                 genshin::daily_note,
                 genshin::enka,
+                genshin::enka_info
             ],
         )
         .register(
